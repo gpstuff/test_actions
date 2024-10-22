@@ -31,7 +31,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Create deploy branch
-        run: git checkout depoy
+        run: git checkout -b deploy
 
       - name: Remove all files
         run: git rm -rf .
