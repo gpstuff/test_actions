@@ -40,6 +40,9 @@ jobs:
       - name: Checkout mydir
         run: git checkout main -- mydir/
 
+      - name: Commit
+        run: git commit -am "Automated deploy commit"
+
       - name: Push branch
         run: git push --set-upstream origin deploy
 
