@@ -39,6 +39,6 @@ jobs:
       - name: Checkout mydir
         run: git checkout main -- mydir/
 
-      - name: Checkout mydir
-        run: git ls-files
+      - name: Push branch
+        run: git push
 
