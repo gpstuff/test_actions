@@ -3,9 +3,8 @@
 name: CI
 permissions:
   contents: write
-# Controls when the workflow will run
+
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "main" ]
     paths:
@@ -15,22 +14,15 @@ on:
     paths:
       - mydir/**
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  deploy-branch:
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      # Runs a single command using the runners shell
       - name: Create deploy branch
         run: git checkout -b deploy
 
@@ -41,7 +33,10 @@ jobs:
         run: git checkout main -- mydir/
 
       - name: Commit
-        run: git commit -am "Automated deploy commit"
+        run: |
+          git config --global user.email "devops@madisof.it"
+          git config --global user.name "Github Actions"
+          git commit -am "Automated deploy commit"
 
       - name: Push branch
         run: git push --set-upstream origin deploy
