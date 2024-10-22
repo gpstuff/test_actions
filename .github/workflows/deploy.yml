@@ -40,5 +40,5 @@ jobs:
         run: git checkout main -- mydir/
 
       - name: Push branch
-        run: git push
+        run: git push --set-upstream origin deploy
 
