@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Remove old branch if exists
-        run: git branch --delete deploy || true
+        run: git push --delete origin deploy || true
 
       - name: Create deploy branch
         run: git checkout -b deploy
