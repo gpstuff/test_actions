@@ -23,11 +23,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Configure git
+        run: |
+          git config --global user.email "devops@madisof.it"
+          git config --global user.name "Github Actions"
+
       - name: Remove old branch if exists
         run: git push --delete origin deploy || true
 
       - name: Create deploy branch
-        run: git checkout -b deploy
+        run: |
+          git checkout -b deploy
+          git push --set-upstream origin deploy
 
       - name: Remove all files
         run: git rm -rf .
@@ -42,5 +49,5 @@ jobs:
           git commit -am "Automated deploy commit"
 
       - name: Push branch
-        run: git push --set-upstream origin deploy
+        run: git push origin deploy
 
