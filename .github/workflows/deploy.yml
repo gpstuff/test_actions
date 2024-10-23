@@ -23,18 +23,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set current timestamp
+        run: echo "TIMESTAMP=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+
       - name: Configure git
         run: |
           git config --global user.email "devops@madisof.it"
           git config --global user.name "Github Actions"
 
-      - name: Remove old branch if exists
-        run: git push --delete origin deploy || true
-
       - name: Create deploy branch
-        run: |
-          git checkout -b deploy
-          git push --set-upstream origin deploy
+        run: git checkout -b deploy
 
       - name: Remove all files
         run: git rm -rf .
@@ -43,11 +41,10 @@ jobs:
         run: git checkout main -- mydir/
 
       - name: Commit
-        run: |
-          git config --global user.email "devops@madisof.it"
-          git config --global user.name "Github Actions"
-          git commit -am "Automated deploy commit"
+        run: git commit -am "Automated deploy commit $TIMESTAMP"
 
-      - name: Push branch
-        run: git push origin deploy
+      - name: Create and push tag
+        run: |
+          git tag automated-deploy-$TIMESTAMP
+          git push origin automated-deploy-$TIMESTAMP
 
