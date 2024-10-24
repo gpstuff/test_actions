@@ -31,14 +31,10 @@ jobs:
           git config --global user.email "devops@madisof.it"
           git config --global user.name "Github Actions"
 
-      - name: Create deploy branch
-        run: git checkout -b deploy
-
-      - name: Remove all files
-        run: git rm -rf .
-
       - name: Checkout mydir
-        run: git checkout main -- mydir/
+        run: |
+          git sparse-checkout init --cone
+          git sparse-checkout set mydir
 
       - name: Commit
         run: git commit -am "Automated deploy commit $TIMESTAMP"
