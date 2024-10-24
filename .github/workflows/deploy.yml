@@ -28,16 +28,25 @@ jobs:
 
       - name: Configure git
         run: |
+          mkdir -p $GITHUB_WORKSPACE
+          cd $GITHUB_WORKSPACE
+          git init
           git config --global user.email "devops@madisof.it"
           git config --global user.name "Github Actions"
+          git remote add origin $GITHUB_SERVER_URL/$GITHUB_REPOSITORY
+
 
       - name: Checkout mydir
         run: |
-          git sparse-checkout init --cone
-          git sparse-checkout set mydir
+          echo "mydir/" > .git/info/sparse-checkout
+          git config --global core.sparseCheckout true
+          git fetch --depth=1 origin $GITHUB_SHA
+          git checkout $GITHUB_SHA
 
-      - name: Commit
-        run: git commit -am "Automated deploy commit $TIMESTAMP"
+      - name: Verify Checkout
+        run: |
+          ls -la
+          du -sh .
 
       - name: Create and push tag
         run: |
