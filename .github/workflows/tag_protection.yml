@@ -5,7 +5,7 @@ on:
     branches:
       - '**'
     tags:
-      - automated-deploy-*
+      - 'automated-deploy-*''
 
 jobs:
   protect-tags:
