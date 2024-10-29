@@ -3,7 +3,7 @@ name: Tag Protection
 on:
   push:
     tags:
-      - "automated-deploy-*"
+      - 'automated-deploy-*''
 
 jobs:
   protect-tags:
