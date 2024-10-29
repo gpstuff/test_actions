@@ -1,0 +1,16 @@
+name: Tag Protection
+
+on:
+  push:
+    tags:
+      - "automated-deploy-*"
+
+jobs:
+  protect-tags:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-actions[bot]' # Allow GitHub Actions to bypass this rule
+    steps:
+      - name: Block unauthorized tag
+        run: |
+          echo "Tag '${GITHUB_REF#refs/tags/}' creation is restricted. Only approved actions can create this tag."
+          exit 1
