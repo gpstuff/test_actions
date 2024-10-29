@@ -2,14 +2,14 @@ name: Tag Protection
 
 on:
   push:
+    branches:
+      - '**'
     tags:
       - automated-deploy-*
 
 jobs:
   protect-tags:
     runs-on: ubuntu-latest
-
-    if: ${{ github.actor }} != 'github-actions[bot]' # Allow GitHub Actions to bypass this rule
 
     steps:
       - name: Block unauthorized tag
