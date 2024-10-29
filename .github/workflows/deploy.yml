@@ -1,9 +1,6 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
+name: Deploy
 permissions:
   contents: write
-  deployments: write
 
 on:
   push:
@@ -15,10 +12,8 @@ on:
     paths:
       - mydir/**
 
-  workflow_dispatch:
-
 jobs:
-  deploy-branch:
+  create-deploy-tag:
     runs-on: ubuntu-latest
 
     steps:
