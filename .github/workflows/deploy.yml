@@ -3,6 +3,7 @@
 name: CI
 permissions:
   contents: write
+  deployments: write
 
 on:
   push:
@@ -21,33 +22,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4
+
       - name: Set current timestamp
         run: echo "TIMESTAMP=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
 
       - name: Configure git
         run: |
-          mkdir -p $GITHUB_WORKSPACE
-          cd $GITHUB_WORKSPACE
-          git init
           git config --global user.email "devops@madisof.it"
           git config --global user.name "Github Actions"
-          git remote add origin $GITHUB_SERVER_URL/$GITHUB_REPOSITORY
 
-
-      - name: Checkout mydir
+      - name: Create temp branch and checkout mydir
         run: |
-          echo "mydir/" > .git/info/sparse-checkout
-          git config --global core.sparseCheckout true
-          git fetch --depth=1 origin $GITHUB_SHA
-          git checkout $GITHUB_SHA
+          git switch --orphan deploy-$TIMESTAMP
+          git checkout main -- mydir/
 
-      - name: Verify Checkout
+      - name: Create commit, tag and push
         run: |
-          ls -la
-          du -sh .
-
-      - name: Create and push tag
-        run: |
+          git commit -am "Automated deploy commit $TIMESTAMP"
           git tag automated-deploy-$TIMESTAMP
           git push origin automated-deploy-$TIMESTAMP
 
