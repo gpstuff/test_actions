@@ -21,6 +21,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
 
       - name: Set current timestamp
         run: echo "TIMESTAMP=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
@@ -39,9 +41,8 @@ jobs:
         run: |
           git commit -am "Automated deploy commit $TIMESTAMP"
           git tag automated-deploy-$TIMESTAMP
+
       - name: Push tag
         run: git push origin automated-deploy-$TIMESTAMP
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
 
 
