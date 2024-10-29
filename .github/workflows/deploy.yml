@@ -40,6 +40,6 @@ jobs:
           git commit -am "Automated deploy commit $TIMESTAMP"
           git tag automated-deploy-$TIMESTAMP
       - name: Push tag
-        run: git push https://${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }} origin automated-deploy-$TIMESTAMP
+        run: git push https://${{ secrets.PAT_TOKEN }}@github.com/${{ GITHUB_REPOSITORY }} origin automated-deploy-$TIMESTAMP
 
 
