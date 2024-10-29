@@ -35,9 +35,12 @@ jobs:
           git switch --orphan deploy-$TIMESTAMP
           git checkout main -- mydir/
 
-      - name: Create commit, tag and push
+      - name: Create commit and tag
         run: |
           git commit -am "Automated deploy commit $TIMESTAMP"
           git tag automated-deploy-$TIMESTAMP
-          git push origin automated-deploy-$TIMESTAMP
+      - name: Push tag
+        run: git push origin automated-deploy-$TIMESTAMP
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
 
