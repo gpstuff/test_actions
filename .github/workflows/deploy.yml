@@ -18,6 +18,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
         with:
           role-to-assume: test-giovanni-nuv-20555
+          aws-account-id: 422579100170
           role-session-name: DeployToS3
           aws-region: ${{ env.AWS_REGION }}
       # Upload a file to AWS s3
