@@ -1,48 +1,27 @@
-name: Deploy
-
-permissions:
-  contents: write
-
+name: AWS example workflow
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - mydir/**
-  pull_request:
-    branches:
-      - main
-    paths:
-      - mydir/**
-
+  push
+env:
+  BUCKET_NAME : "test-giovanni-nuv-20555"
+  AWS_REGION : "eu-west-1"
+# permission can be added at job level or workflow level
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
 jobs:
-  create-deploy-tag:
+  S3PackageUpload:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Git clone the repository
+        uses: actions/checkout@v4
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
         with:
-          ssh-key: ${{ secrets.DEPLOY_KEY }}
-
-      - name: Set current timestamp
-        run: echo "TIMESTAMP=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
-
-      - name: Configure git
+          role-to-assume: test-giovanni-nuv-20555
+          role-session-name: DeployToS3
+          aws-region: ${{ env.AWS_REGION }}
+      # Upload a file to AWS s3
+      - name: Copy test-file to s3
         run: |
-          git config --global user.email "devops@madisof.it"
-          git config --global user.name "Github Actions"
-
-      - name: Create temp branch and checkout mydir
-        run: |
-          git switch --orphan deploy-$TIMESTAMP
-          git checkout main -- mydir/
-
-      - name: Create commit and tag
-        run: |
-          git commit -am "Automated deploy commit $TIMESTAMP"
-          git tag automated-deploy-$TIMESTAMP
-
-      - name: Push tag
-        run: git push origin automated-deploy-$TIMESTAMP
-
+          aws s3 cp ./mydir/test-file s3://${{ env.BUCKET_NAME }}/test-file
 
